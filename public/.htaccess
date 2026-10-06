@@ -1,0 +1,66 @@
+# Rangmanch — Apache config for GoDaddy cPanel / shared hosting.
+# Copied into the export by `npm run build`; upload it alongside the site.
+
+# ---------------------------------------------------------------- HTTPS ----
+# Force https:// and a single canonical host. Uncomment once the SSL
+# certificate is active in cPanel, and set your real domain below.
+# <IfModule mod_rewrite.c>
+#   RewriteEngine On
+#   RewriteCond %{HTTPS} off
+#   RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+#
+#   # Send www to the bare domain (swap the rule if you prefer www).
+#   RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+#   RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+# </IfModule>
+
+# ------------------------------------------------------------ error page ----
+ErrorDocument 404 /404.html
+
+# -------------------------------------------------------------- caching ----
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # Hashed build assets are immutable.
+  <FilesMatch "\.(js|css|woff2)$">
+    ExpiresDefault "access plus 1 year"
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  <FilesMatch "\.(webp|jpg|jpeg|png|svg|ico)$">
+    ExpiresDefault "access plus 6 months"
+    Header set Cache-Control "public, max-age=15552000"
+  </FilesMatch>
+
+  # HTML must revalidate so redeploys are picked up immediately.
+  <FilesMatch "\.html$">
+    ExpiresDefault "access plus 0 seconds"
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# ----------------------------------------------------------- compression ----
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ---------------------------------------------------------- mime types -----
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType font/woff2 .woff2
+</IfModule>
+
+# -------------------------------------------------------------- security ----
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# Block access to dotfiles that should never ship.
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
