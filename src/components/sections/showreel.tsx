@@ -204,14 +204,22 @@ export function Showreels() {
           role="dialog"
           aria-modal="true"
           aria-label={`${active.title} — ${active.venue}`}
-          className="fixed inset-0 z-[80] flex items-center justify-center bg-stage-950/92 p-4 backdrop-blur-xl sm:p-8"
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-stage-950/92 p-3 backdrop-blur-xl sm:p-8"
           onClick={close}
         >
+          {/*
+            The whole panel is capped by the space actually available
+            vertically, so the 16:9 frame shrinks instead of overflowing on
+            short viewports — landscape phones, and "Desktop site" mode where
+            the layout viewport is wide but the visual one is not. Capping the
+            panel (rather than just the video) keeps the title, player and hint
+            aligned to the same edges.
+          */}
           <div
-            className="relative w-full max-w-5xl"
+            className="relative flex max-h-full w-[min(100%,64rem,calc((100svh-9rem)*16/9))] flex-col sm:w-[min(100%,64rem,calc((100svh-11rem)*16/9))]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="mb-3 flex items-end justify-between gap-4">
+            <div className="mb-3 flex shrink-0 items-end justify-between gap-4">
               <div className="min-w-0">
                 {active.artist && (
                   <p className="text-[10px] font-semibold tracking-[0.2em] text-gold-300 uppercase">
@@ -247,19 +255,21 @@ export function Showreels() {
               </button>
             </div>
 
-            <div className="aspect-video w-full overflow-hidden rounded-3xl border border-gold-500/25 bg-black">
+            <div className="aspect-video w-full shrink-0 overflow-hidden rounded-2xl border border-gold-500/25 bg-black sm:rounded-3xl">
               <iframe
                 key={active.id}
                 src={playerUrl(active.id)}
                 title={`${active.title} — ${active.venue}`}
                 allow="autoplay; fullscreen"
                 allowFullScreen
-                className="size-full"
+                /* `block` removes the inline-element baseline gap that otherwise
+                   shows as a black strip under the player. */
+                className="block size-full border-0"
               />
             </div>
 
-            <p className="mt-3 text-center text-[11px] text-faint">
-              Press Esc or click outside to close
+            <p className="mt-3 shrink-0 text-center text-[11px] text-faint">
+              Tap outside or press Esc to close
             </p>
           </div>
         </div>
