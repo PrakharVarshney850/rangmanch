@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { DrivePlayer } from "@/components/drive-player";
 import { SectionHeading } from "@/components/section-heading";
 import { Reveal } from "@/components/reveal";
 import {
@@ -204,73 +205,85 @@ export function Showreels() {
           role="dialog"
           aria-modal="true"
           aria-label={`${active.title} — ${active.venue}`}
-          className="fixed inset-0 z-[80] flex items-center justify-center bg-stage-950/92 p-3 backdrop-blur-xl sm:p-8"
+          /*
+            `h-[100svh]` rather than `inset-0`: on mobile, `inset-0` resolves
+            against the *layout* viewport, which is taller than the visible area
+            while the browser's URL bar is on screen. Centring inside it pushes
+            the player below the fold. `svh` is the viewport with the chrome
+            showing. Scrolling is allowed so that on very short viewports —
+            landscape phones — the player keeps a usable size instead of being
+            shrunk to nothing.
+          */
+          className="fixed inset-x-0 top-0 z-[80] h-[100svh] overflow-y-auto bg-stage-950/95 backdrop-blur-xl"
           onClick={close}
         >
-          {/*
-            The whole panel is capped by the space actually available
-            vertically, so the 16:9 frame shrinks instead of overflowing on
-            short viewports — landscape phones, and "Desktop site" mode where
-            the layout viewport is wide but the visual one is not. Capping the
-            panel (rather than just the video) keeps the title, player and hint
-            aligned to the same edges.
-          */}
-          <div
-            className="relative flex max-h-full w-[min(100%,64rem,calc((100svh-9rem)*16/9))] flex-col sm:w-[min(100%,64rem,calc((100svh-11rem)*16/9))]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="mb-3 flex shrink-0 items-end justify-between gap-4">
-              <div className="min-w-0">
-                {active.artist && (
-                  <p className="text-[10px] font-semibold tracking-[0.2em] text-gold-300 uppercase">
-                    {active.artist}
+          <div className="flex min-h-full items-center justify-center p-3 sm:p-8">
+            <div
+              className="relative flex flex-col"
+              /*
+                The player box is `0.5625 * width + CHROME_PX` tall, so width is
+                what controls height. Cap it by the space actually available so
+                the whole player fits without scrolling on normal screens; the
+                `max()` floor keeps it usable on very short viewports, where the
+                dialog's own scrolling takes over.
+              */
+              style={{
+                width:
+                  "max(18rem, min(100%, 64rem, (100svh - 280px) * 1.7778))",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="mb-2.5 flex items-end justify-between gap-4 sm:mb-3">
+                <div className="min-w-0">
+                  {active.artist && (
+                    <p className="text-[10px] font-semibold tracking-[0.2em] text-gold-300 uppercase">
+                      {active.artist}
+                    </p>
+                  )}
+                  <h3 className="truncate font-display text-base text-cream sm:text-xl">
+                    {active.title}
+                  </h3>
+                  <p className="truncate text-xs text-muted">
+                    {active.venue} · {active.year}
                   </p>
-                )}
-                <h3 className="truncate font-display text-xl text-cream">
-                  {active.title}
-                </h3>
-                <p className="text-xs text-muted">
-                  {active.venue} · {active.year}
-                </p>
+                </div>
+
+                <button
+                  ref={closeRef}
+                  type="button"
+                  onClick={close}
+                  aria-label="Close video"
+                  className="grid size-10 shrink-0 place-items-center rounded-full border border-gold-500/30 text-cream transition hover:border-gold-400 hover:bg-stage-800"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    aria-hidden
+                    className="size-4"
+                  >
+                    <path d="M6 6l12 12M18 6L6 18" />
+                  </svg>
+                </button>
               </div>
 
-              <button
-                ref={closeRef}
-                type="button"
-                onClick={close}
-                aria-label="Close video"
-                className="grid size-10 shrink-0 place-items-center rounded-full border border-gold-500/30 text-cream transition hover:border-gold-400 hover:bg-stage-800"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                  aria-hidden
-                  className="size-4"
-                >
-                  <path d="M6 6l12 12M18 6L6 18" />
-                </svg>
-              </button>
-            </div>
-
-            <div className="aspect-video w-full shrink-0 overflow-hidden rounded-2xl border border-gold-500/25 bg-black sm:rounded-3xl">
-              <iframe
+              {/*
+                Sized 16:9 plus a generous allowance for Drive's chrome, so the
+                full picture stays visible. See drive-player.tsx.
+              */}
+              <DrivePlayer
                 key={active.id}
+                fileId={active.id}
                 src={playerUrl(active.id)}
                 title={`${active.title} — ${active.venue}`}
-                allow="autoplay; fullscreen"
-                allowFullScreen
-                /* `block` removes the inline-element baseline gap that otherwise
-                   shows as a black strip under the player. */
-                className="block size-full border-0"
               />
-            </div>
 
-            <p className="mt-3 shrink-0 text-center text-[11px] text-faint">
-              Tap outside or press Esc to close
-            </p>
+              <p className="mt-2 text-center text-[11px] text-faint">
+                Tap outside or press Esc to close
+              </p>
+            </div>
           </div>
         </div>
       )}

@@ -1,9 +1,12 @@
 /**
  * Single source of truth for brand facts, links and contact details.
  *
- * Values marked NEEDS-CONFIRMATION are placeholders: swap them for the real
- * ones before going live. Everything else is taken from Rangmanch's own
- * public profiles and supplied creatives.
+ * Everything here is taken from Rangmanch's own public profiles, the business
+ * card and supplied creatives.
+ *
+ * Note on the domain: Rangmanch is `therangmanch.in`. The similarly named
+ * `rangmanch.in` is an unrelated applied-theatre company, so neither the
+ * canonical URL nor the contact address should ever point there.
  */
 
 export const site = {
@@ -19,11 +22,12 @@ export const site = {
   /**
    * Canonical origin, used for OG tags, the sitemap and robots.txt.
    * Override per-environment with NEXT_PUBLIC_SITE_URL (no trailing slash).
+   *
+   * `www` is the canonical host: the apex `therangmanch.in` serves a 308 to it.
    */
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://rangmanch.in").replace(
-    /\/$/,
-    "",
-  ),
+  url: (
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.therangmanch.in"
+  ).replace(/\/$/, ""),
   locale: "en_IN",
   founded: "2018",
   base: "Pan-India",
@@ -43,8 +47,7 @@ export const site = {
   /* Taken from the Rangmanch business card. */
   contact: {
     phone: "+91 63989 54600",
-    // NEEDS-CONFIRMATION — replace with the real inbox before launch.
-    email: "partnerships@rangmanch.in",
+    email: "partnership@therangmanch.in",
     preferred: "Instagram DM",
     responseTime: "Within 24 hours",
   },
