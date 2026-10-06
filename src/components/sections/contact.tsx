@@ -28,6 +28,24 @@ const channels = [
   },
 ];
 
+/**
+ * Lets a long address wrap after the "@" rather than mid-word.
+ *
+ * Returns the value untouched when there is nothing before the "@", so the
+ * Instagram handle ("@the_rangmanch") and the phone number are unaffected.
+ */
+function withBreakHint(value: string) {
+  const at = value.indexOf("@");
+  if (at <= 0) return value;
+  return (
+    <>
+      {value.slice(0, at + 1)}
+      <wbr />
+      {value.slice(at + 1)}
+    </>
+  );
+}
+
 export function Contact() {
   return (
     <section
@@ -47,11 +65,11 @@ export function Contact() {
       </div>
 
       <div className="container-stage">
-        <div className="relative overflow-hidden rounded-5xl border border-gold-500/20 bg-stage-900/70 p-8 backdrop-blur-xl sm:p-14">
+        <div className="relative overflow-hidden rounded-5xl border border-gold-500/20 bg-stage-900/70 p-6 backdrop-blur-xl sm:p-14">
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-400/60 to-transparent" />
 
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
-            <div>
+            <div className="min-w-0">
               <Reveal>
                 <div className="flex items-center gap-3">
                   <span className="h-px w-8 bg-gold-500/60" />
@@ -100,7 +118,14 @@ export function Contact() {
               </Reveal>
             </div>
 
-            <Reveal delay={200} className="space-y-3">
+            {/*
+              `min-w-0` is required on both columns: grid items default to
+              `min-width: auto`, so they refuse to shrink below their content's
+              min-content width. The channel rows below contain an unbreakable
+              email address, which pushed this column to 326px inside a 246px
+              card and the card's `overflow-hidden` then clipped the text.
+            */}
+            <Reveal delay={200} className="min-w-0 space-y-3">
               <div className="mb-8 flex justify-center lg:justify-end">
                 <Image
                   src={logo}
@@ -129,8 +154,8 @@ export function Contact() {
                     <span className="block text-[10px] font-semibold tracking-[0.2em] text-faint uppercase">
                       {channel.label}
                     </span>
-                    <span className="block truncate text-sm font-medium text-cream">
-                      {channel.value}
+                    <span className="block text-sm font-medium break-words text-cream">
+                      {withBreakHint(channel.value)}
                     </span>
                     <span className="block text-[11px] text-faint">
                       {channel.note}
