@@ -13,7 +13,7 @@ export function Work() {
       className="relative scroll-mt-24 overflow-hidden py-24 sm:py-32"
     >
       <div aria-hidden className="absolute inset-0 -z-10">
-        <div className="absolute -left-48 top-1/4 size-[34rem] rounded-full bg-spectrum-magenta/10 blur-[160px]" />
+        <div className="glow absolute -left-48 top-1/4 size-[34rem] [--glow-color:color-mix(in_oklab,var(--color-spectrum-magenta)_10%,transparent)]" />
       </div>
 
       <div className="container-stage">

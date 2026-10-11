@@ -40,6 +40,7 @@ import maaTujheSalaam from "@/assets/showreel/maa-tujhe-salaam.webp";
  */
 
 export type Showreel = {
+  /** Google Drive file ID. */
   id: string;
   title: string;
   artist?: string;

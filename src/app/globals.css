@@ -33,8 +33,11 @@
 
   --color-cream: #f6f2ea;
   --color-muted: #9b93a8;
-  /* Raised from #6b6478 (3.6:1) to clear WCAG AA on the near-black ground. */
-  --color-faint: #7b738a;
+  /*
+   * Raised from #6b6478 (3.6:1) and then #7b738a (4.44:1) to clear WCAG AA's
+   * 4.5:1 for normal-size text on the near-black ground. Measured 4.57:1.
+   */
+  --color-faint: #7d758c;
 
   --font-display: var(--font-cinzel), ui-serif, Georgia, serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -420,6 +423,27 @@
       transparent 70%
     ),
     linear-gradient(var(--color-stage-900), var(--color-stage-950));
+}
+
+/*
+ * Soft colour wash sitting behind a section.
+ *
+ * These replace `rounded-full bg-<colour> blur-[150px]`. A 150px blur on a
+ * 30rem circle makes the compositor rasterise and then blur a very large
+ * surface on every paint, which was the single biggest contributor to style
+ * and layout time on mobile (~2.9s). A radial gradient renders the same soft
+ * falloff for virtually nothing.
+ *
+ * The colour is held flat to 28% before falling off, which matches the plateau
+ * a heavy blur leaves in the middle of a large circle.
+ */
+@utility glow {
+  background-image: radial-gradient(
+    closest-side,
+    var(--glow-color, transparent) 0%,
+    var(--glow-color, transparent) 28%,
+    transparent 100%
+  );
 }
 
 /* Thin spectrum rule used as a section divider. */

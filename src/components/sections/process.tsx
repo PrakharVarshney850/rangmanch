@@ -18,24 +18,32 @@ export function Process() {
 
         <ol className="relative mt-16 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {processSteps.map((step, i) => (
-            <Reveal key={step.number} delay={(i % 3) * 110}>
-              <li className="glass group relative h-full overflow-hidden rounded-4xl p-8 transition-colors hover:border-gold-500/35">
-                <div className="flex items-start justify-between gap-4">
-                  <span className="grid size-12 place-items-center rounded-2xl border border-gold-500/25 bg-stage-800/80 p-3 text-gold-400">
-                    {icons[step.icon]}
-                  </span>
-                  <span className="font-display text-3xl font-black text-cream/10 transition-colors group-hover:text-gold-500/30">
-                    {step.number}
-                  </span>
-                </div>
+            /*
+              `as="li"` keeps the list semantics intact: rendering Reveal as a
+              div here put a non-<li> between the <ol> and its items, which
+              breaks the list for screen readers.
+            */
+            <Reveal
+              as="li"
+              key={step.number}
+              delay={(i % 3) * 110}
+              className="glass group relative h-full overflow-hidden rounded-4xl p-8 transition-colors hover:border-gold-500/35"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <span className="grid size-12 place-items-center rounded-2xl border border-gold-500/25 bg-stage-800/80 p-3 text-gold-400">
+                  {icons[step.icon]}
+                </span>
+                <span className="font-display text-3xl font-black text-cream/10 transition-colors group-hover:text-gold-500/30">
+                  {step.number}
+                </span>
+              </div>
 
-                <h3 className="mt-6 font-display text-xl text-cream">
-                  {step.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted">
-                  {step.body}
-                </p>
-              </li>
+              <h3 className="mt-6 font-display text-xl text-cream">
+                {step.title}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted">
+                {step.body}
+              </p>
             </Reveal>
           ))}
         </ol>

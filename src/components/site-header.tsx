@@ -40,9 +40,22 @@ export function SiteHeader() {
         }`}
       >
       <div className="container-stage flex h-[72px] items-center justify-between gap-6">
-        <a href="#top" className="group flex items-center gap-3" aria-label={`${site.name} home`}>
+        {/*
+          No `aria-label` here: an accessible name that omits the visible
+          wordmark fails WCAG 2.5.3 (Label in Name) and breaks voice control.
+          The visible text names the link, with "home" appended for intent.
+        */}
+        <a href="#top" className="group flex items-center gap-3">
           <span className="relative block size-11 shrink-0 overflow-hidden rounded-full ring-1 ring-gold-500/40 transition group-hover:ring-gold-400">
-            <Image src={logo} alt="" fill sizes="44px" className="object-cover" priority />
+            <Image
+              src={logo}
+              alt=""
+              fill
+              sizes="44px"
+              priority
+              fetchPriority="high"
+              className="object-cover"
+            />
           </span>
           <span>
             <span className="block font-display text-base font-bold tracking-[0.2em] text-cream sm:text-lg">
@@ -52,6 +65,7 @@ export function SiteHeader() {
               {site.tagline}
             </span>
           </span>
+          <span className="sr-only">home</span>
         </a>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">

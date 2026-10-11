@@ -4,7 +4,7 @@ Marketing portfolio for **Rangmanch** ([@the_rangmanch](https://www.instagram.co
 
 Built with Next.js 16 (App Router, Turbopack), React 19 and Tailwind CSS v4. The whole site prerenders as static HTML.
 
-> **New to the project?** Start with **[SETUP.md](./SETUP.md)** to get it running on your machine, then **[DEPLOY.md](./DEPLOY.md)** to put it online.
+> **New to the project?** Start with **[SETUP.md](./SETUP.md)** to get it running on your machine, then deploy with **[VERCEL.md](./VERCEL.md)** (free, recommended) or **[DEPLOY.md](./DEPLOY.md)** (GoDaddy cPanel).
 
 ## Getting started
 
@@ -61,10 +61,12 @@ www-redirect block at the top of `.htaccess`.
 
 ### Alternative hosts
 
-The same `out/` folder deploys unchanged to Netlify, Cloudflare Pages or
-Vercel — drag-and-drop the folder, then point the GoDaddy domain's DNS at the
-host. That route adds a global CDN and automatic HTTPS at no cost; GoDaddy
-keeps the domain either way.
+**Vercel is the recommended route** — free, automatic HTTPS, global CDN, and
+redeploys on every `git push`. No code changes are needed; see
+**[VERCEL.md](./VERCEL.md)**.
+
+The same `out/` folder also deploys unchanged to Netlify or Cloudflare Pages.
+Either way GoDaddy keeps the domain — only the DNS records point elsewhere.
 
 ## Project structure
 
@@ -160,10 +162,16 @@ Venues such as SVIET are **not** partners — they are where an event happened. 
 
 ### Before going live
 
-Two values are placeholders and are marked `NEEDS-CONFIRMATION` in the source:
+Both former placeholders are now set to real values:
 
-1. `site.contact.email` — currently `partnerships@rangmanch.in`
-2. `site.url` — currently `https://rangmanch.in`, used for canonical URLs, OG tags and the sitemap
+1. `site.contact.email` — `partnership@therangmanch.in`
+2. `site.url` — `https://www.therangmanch.in`, used for canonical URLs, OG tags and the sitemap
+
+> **Do not** use `rangmanch.in` (without the "the") for either. That domain
+> belongs to an unrelated applied-theatre company — its mail is on Hostinger
+> while Rangmanch runs Google Workspace on `therangmanch.in`. Using it would
+> send partnership enquiries to a stranger and credit canonical URLs to their
+> site.
 
 The contact phone number comes from the Rangmanch business card and is live on the site. `stats` carries the headline numbers — 180+ events and a 2018 founding date; "years on stage" is derived from `site.founded` so it never goes stale.
 
@@ -172,6 +180,28 @@ The contact phone number comes from the Rangmanch business card and is live on t
 - Every animation is disabled under `prefers-reduced-motion: reduce`, including the curtain intro
 - The mobile drawer traps background scroll and closes on `Escape`
 - Focus-visible rings use the gold accent at a 2px outline
+- Lighthouse accessibility scores 100; `--color-faint` is pinned at `#7d758c` because anything darker drops below the 4.5:1 contrast floor on the near-black ground
+
+## Performance & SEO
+
+Lighthouse (simulated mobile / desktop): **87 / 99** performance, **100** accessibility, best practices and SEO.
+
+Two constraints shape the approach:
+
+**`output: "export"` disables `next/image` optimisation.** There is no image endpoint on a static host, so nothing is resized at request time and no `srcset` is emitted — every asset downloads exactly as committed. Source images therefore have to be stored at the size they are actually displayed. `scripts/optimise-images.mjs` does that, with the measured display dimensions recorded next to each entry:
+
+```bash
+node scripts/optimise-images.mjs   # originals are copied to .image-originals/ first
+```
+
+**Large blur filters are expensive.** The section glows were `rounded-full bg-<colour> blur-[150px]` on 30–34rem elements, which makes the compositor rasterise and blur a very large surface on every paint — together they accounted for roughly 700ms of style and layout time on mobile. They are now the `glow` utility in `globals.css`, a radial gradient that is visually equivalent and essentially free.
+
+Other things worth not undoing:
+
+- The hero backdrop is the LCP element and has its own heavily compressed copy (`brand/hero-backdrop.webp`, 960px wide) rather than sharing the full-quality showreel poster. It renders at 30% opacity under two gradient washes, so the loss is invisible.
+- Only the two above-the-fold images carry `priority`. The featured showreel poster deliberately does not — preloading it just competed with the LCP.
+- The three hero proof photos use `loading="eager"` instead: visible immediately, but without a preload that would steal bandwidth from the LCP.
+- `src/lib/schema.ts` emits `Organization`, `WebSite` and `FAQPage` JSON-LD as one `@graph`. The FAQ entries mirror the visible accordion, so changing `faqs` in `content.ts` keeps both in sync automatically. Note that `FAQPage` no longer produces rich results anywhere — Google deprecated them in May 2026 — it is retained only as machine-readable context for AI answer engines. `VideoObject` is deliberately absent; it requires an `uploadDate` we do not have, and the files stream from Drive rather than this origin.
 
 ## Brand assets
 

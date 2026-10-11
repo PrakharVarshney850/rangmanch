@@ -27,12 +27,15 @@ This site is **static** — plain HTML, CSS and JavaScript with no database and 
 In the project folder, create a file named **`.env.local`** with this one line, using your real domain:
 
 ```
-NEXT_PUBLIC_SITE_URL=https://rangmanch.in
+NEXT_PUBLIC_SITE_URL=https://www.therangmanch.in
 ```
 
 No trailing slash. This sets the links Google and social-media previews use.
 
-> Not sure of the exact domain? It is listed in **GoDaddy → My Products → Domains**.
+> Use the `www` host — the apex `therangmanch.in` redirects to it.
+>
+> Careful: `rangmanch.in` without the "the" is a **different company's** site.
+> Pointing the canonical URL there would hand your search ranking to them.
 
 ## Step 2 — Build the site
 
@@ -102,7 +105,7 @@ public_html/                  public_html/
   └── _next/
 ```
 
-If you do it wrong the site appears at `rangmanch.in/out/` instead of `rangmanch.in`. Just move the files up one level to fix it.
+If you do it wrong the site appears at `therangmanch.in/out/` instead of `therangmanch.in`. Just move the files up one level to fix it.
 
 ### Faster for lots of files
 
@@ -110,13 +113,13 @@ Zip the contents of `out` on your laptop, upload the single `.zip`, then right-c
 
 ## Step 7 — Check it
 
-Visit **https://rangmanch.in**.
+Visit **https://www.therangmanch.in**.
 
 Confirm:
 - The page loads with the gold-on-black design
 - Posters appear in the Showreel section
 - Clicking a video opens the player
-- `rangmanch.in/some-made-up-page` shows the branded 404 page
+- `therangmanch.in/some-made-up-page` shows the branded 404 page
 
 > Nothing showing yet? DNS can take a few hours on a brand-new domain. Try a different browser or your phone on mobile data — your computer may have cached the old page.
 
@@ -126,7 +129,7 @@ Without this, browsers show *"Not secure"* next to your domain.
 
 1. In cPanel, open **SSL/TLS Status**
 2. Select your domain, click **Run AutoSSL**
-3. Wait a few minutes, then confirm **https://rangmanch.in** loads with a padlock
+3. Wait a few minutes, then confirm **https://www.therangmanch.in** loads with a padlock
 
 Once the padlock appears, force every visitor onto HTTPS:
 
@@ -148,7 +151,7 @@ It should end up looking like this:
 </IfModule>
 ```
 
-Now test `http://rangmanch.in` — it should jump to `https://`.
+Now test `http://therangmanch.in` — it should jump to `https://`.
 
 > If the site breaks after this, undo it: put the `#` marks back and save. Some shared plans handle redirects differently.
 
@@ -193,7 +196,7 @@ You get a live address like `rangmanch.pages.dev` within a minute.
 ## Step 3 — Connect your domain
 
 1. In the project, go to **Custom domains → Set up a domain**
-2. Enter `rangmanch.in` and follow the prompts
+2. Enter `therangmanch.in` and follow the prompts
 3. Cloudflare shows you the DNS records to add
 
 ## Step 4 — Update DNS at GoDaddy
@@ -248,7 +251,7 @@ Hard-refresh with **Ctrl + Shift + R**. Confirm the new files really did overwri
 
 ## Before you go live
 
-- [ ] Replace the placeholder email in `src/lib/site.ts` — it is currently `partnerships@rangmanch.in` and marked `NEEDS-CONFIRMATION`
+- [ ] Confirm `partnership@therangmanch.in` in `src/lib/site.ts` reaches a monitored inbox
 - [ ] Set your real domain in `.env.local`, then rebuild
 - [ ] Confirm the Drive folder is shared as *"Anyone with the link"*
 - [ ] Turn on AutoSSL and enable the HTTPS redirect

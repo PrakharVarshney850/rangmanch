@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import iitRopar from "@/assets/showreel/iit-ropar.webp";
+import heroBackdrop from "@/assets/brand/hero-backdrop.webp";
 
 /**
  * A single wide crowd frame behind the hero, held well back.
@@ -8,6 +8,11 @@ import iitRopar from "@/assets/showreel/iit-ropar.webp";
  * The named proof cards carry the visual weight, so this is atmosphere only —
  * one slow drift rather than the stack of blurred gradient blobs and competing
  * animation loops it replaced.
+ *
+ * This is the page's LCP element, so it uses its own heavily compressed copy
+ * rather than sharing the full-quality showreel poster: at 30% opacity under
+ * two gradient washes the loss is invisible, and it halves the bytes on the
+ * critical path.
  */
 export function HeroBackdrop() {
   return (
@@ -16,11 +21,12 @@ export function HeroBackdrop() {
 
       <div className="absolute inset-0 opacity-[0.3]">
         <Image
-          src={iitRopar}
+          src={heroBackdrop}
           alt=""
           fill
           sizes="100vw"
           priority
+          fetchPriority="high"
           className="animate-drift object-cover"
         />
       </div>

@@ -12,7 +12,7 @@ export function Services() {
     >
       <div aria-hidden className="absolute inset-0 -z-10">
         <div className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 rule-spectrum" />
-        <div className="absolute -right-40 top-1/3 size-[30rem] rounded-full bg-curtain-700/15 blur-[150px]" />
+        <div className="glow absolute -right-40 top-1/3 size-[30rem] [--glow-color:color-mix(in_oklab,var(--color-curtain-700)_15%,transparent)]" />
       </div>
 
       <div className="container-stage">

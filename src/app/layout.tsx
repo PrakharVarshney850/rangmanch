@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { siteSchema } from "@/lib/schema";
 import { site } from "@/lib/site";
 
 /*
@@ -82,28 +83,6 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: site.name,
-  alternateName: site.handle,
-  url: site.url,
-  description: site.description,
-  slogan: site.promise,
-  foundingDate: site.founded,
-  areaServed: "IN",
-  telephone: site.contact.phone,
-  contactPoint: {
-    "@type": "ContactPoint",
-    contactType: "sales",
-    telephone: site.contact.phone,
-    email: site.contact.email,
-    areaServed: "IN",
-    availableLanguage: ["en", "hi"],
-  },
-  sameAs: [site.links.instagram],
-};
-
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en-IN" className={`${cinzel.variable} ${inter.variable}`}>
@@ -111,7 +90,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script
           type="application/ld+json"
           // Static, build-time constant — no user input is interpolated here.
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
         />
         {children}
       </body>

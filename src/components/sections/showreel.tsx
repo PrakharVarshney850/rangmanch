@@ -89,8 +89,8 @@ export function Showreels() {
       className="relative scroll-mt-24 overflow-hidden py-24 sm:py-32"
     >
       <div aria-hidden className="absolute inset-0 -z-10">
-        <div className="absolute -left-40 top-1/3 size-[32rem] rounded-full bg-curtain-700/15 blur-[150px]" />
-        <div className="absolute -right-40 bottom-0 size-[30rem] rounded-full bg-spectrum-blue/10 blur-[150px]" />
+        <div className="glow absolute -left-40 top-1/3 size-[32rem] [--glow-color:color-mix(in_oklab,var(--color-curtain-700)_15%,transparent)]" />
+        <div className="glow absolute -right-40 bottom-0 size-[30rem] [--glow-color:color-mix(in_oklab,var(--color-spectrum-blue)_10%,transparent)]" />
       </div>
 
       <div className="container-stage">
@@ -107,7 +107,12 @@ export function Showreels() {
             onClick={() => setActive(featuredReel)}
             className="group relative block aspect-video w-full overflow-hidden rounded-5xl border border-gold-500/20 bg-stage-900 text-left transition-colors hover:border-gold-500/50"
           >
-            <Thumb reel={featuredReel} sizes="100vw" priority />
+            {/*
+              Not `priority`: the showreel sits several sections below the
+              fold, so preloading this 75 KB poster only competes with the
+              hero backdrop, which is the actual LCP element.
+            */}
+            <Thumb reel={featuredReel} sizes="(min-width: 1280px) 1200px, 100vw" />
             <span className="absolute inset-0 bg-gradient-to-t from-stage-950 via-stage-950/40 to-stage-950/10" />
 
             {/* Centred on wide cards; tucked top-right on phones, where the

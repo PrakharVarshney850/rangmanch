@@ -46,6 +46,12 @@ export function HeroProof() {
             alt={`${card.artist} at ${card.venue}`}
             fill
             sizes="(min-width: 1024px) 22vw, 45vw"
+            /*
+              Above the fold, so `lazy` (next/image's default) would needlessly
+              defer it. Not `priority` either: preloading three photos would
+              only steal bandwidth from the hero backdrop, which is the LCP.
+            */
+            loading="eager"
             className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-stage-950 via-stage-950/25 to-transparent" />

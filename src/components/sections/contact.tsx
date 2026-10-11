@@ -54,7 +54,7 @@ export function Contact() {
     >
       <div aria-hidden className="absolute inset-0 -z-10">
         <div className="absolute inset-0 stage-floor" />
-        <div className="absolute left-1/2 top-0 h-[40rem] w-[90vw] -translate-x-1/2 rounded-[50%] bg-gold-500/10 blur-[150px]" />
+        <div className="glow absolute left-1/2 top-0 h-[40rem] w-[90vw] -translate-x-1/2 [--glow-color:color-mix(in_oklab,var(--color-gold-500)_10%,transparent)]" />
         <div
           className="absolute left-1/2 top-0 h-[55vh] w-[110vw] -translate-x-1/2"
           style={{

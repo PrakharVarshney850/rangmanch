@@ -9,8 +9,8 @@ export function WhyCampus() {
       className="relative scroll-mt-24 overflow-hidden border-y border-gold-500/10 bg-stage-900/40 py-24 sm:py-32"
     >
       <div aria-hidden className="absolute inset-0 -z-10">
-        <div className="absolute -left-40 bottom-0 size-[30rem] rounded-full bg-spectrum-blue/10 blur-[150px]" />
-        <div className="absolute -right-40 top-0 size-[30rem] rounded-full bg-gold-500/10 blur-[150px]" />
+        <div className="glow absolute -left-40 bottom-0 size-[30rem] [--glow-color:color-mix(in_oklab,var(--color-spectrum-blue)_10%,transparent)]" />
+        <div className="glow absolute -right-40 top-0 size-[30rem] [--glow-color:color-mix(in_oklab,var(--color-gold-500)_10%,transparent)]" />
       </div>
 
       <div className="container-stage">
