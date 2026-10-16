@@ -27,7 +27,7 @@ export function About() {
                 <CountUp to={stat.value} suffix={stat.suffix} prefix={stat.prefix} />
               </p>
               <p className="mt-3 text-[15px] font-semibold text-cream">{stat.label}</p>
-              <p className="mt-2 text-[13px] leading-relaxed text-faint">
+              <p className="mt-2 text-[13px] leading-relaxed text-muted">
                 {stat.caption}
               </p>
             </Reveal>
